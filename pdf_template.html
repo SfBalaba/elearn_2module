@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vacancy</title>
+    <style>
+        body {
+            font-family: Verdana;
+            text-align: center;
+        }
+        .table table{
+            border-collapse: collapse;
+        }
+        .table td{
+            text-align: center;
+            padding: 5px;
+            border: 1px solid black;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+<center><h1>Аналитика по зарплатам и городам для профессии {{ name_vacancy }}</h1></center>
+<center><img style="width:100%" src="C:\Users\anony\Balaba\graph.png"></center>
+<center><h2>Статистика по годам</h2></center>
+<center><div class="table">{{ table1 }}</div></center>
+<center><h2>Статистика по городам</h2></center>
+<center><div class="table">{{ table2 }}</div></center>
+</body>
+</html>
