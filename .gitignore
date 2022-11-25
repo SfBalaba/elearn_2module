@@ -2,3 +2,5 @@ ignored_example.txt
 vacancies_by_year.csv
 venv
 .idea
+vacancies_medium.csv
+__pycache__
