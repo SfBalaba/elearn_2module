@@ -3,3 +3,4 @@ if(choice =="Статистика"):
     import statistics
 if(choice == "Вакансии"):
     import table
+#changes from develop
