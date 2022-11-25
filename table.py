@@ -265,12 +265,6 @@ is_reversed_sort = input('Обратный порядок сортировки (
 interval = list(map(int, input('Введите диапазон вывода: ').split()))
 columns = input('Введите требуемые столбцы: ')
 
-# vacancies.csv
-# Опыт работы: От 3 до 6 лет
-# Оклад
-# Нет
-# 10 20
-# Название, Навыки, Опыт работы, Компания
 
 if os.stat(file_name).st_size == 0:
     exit_from_file('Пустой файл')
