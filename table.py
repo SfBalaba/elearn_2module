@@ -5,15 +5,48 @@ from prettytable import PrettyTable, ALL
 
 
 class DataSet:
+    """Класс представляющий данные из файла .csv
+
+            Attributes:
+                file_name (str): название вводимого файла csv
+                vacancies_objects (List[Vacancy]): список состоящий из экземпляров класса Vacancy,
+                 содержащий только те строки, которые заполнены полностью, и не содержат пустые элементы.
+
+        """
     def __init__(self, file_name: str):
+        """Инициализирует экземпляр класса DataSet
+
+                Args:
+                    file_name (str): название вводимого файла csv
+
+                Returns:
+                    object:
+                """
         self.file_name = file_name
         self.vacancies_objects = [Vacancy(vac) for vac in self.csv_filer(*self.csv_reader(file_name))]
 
     def clean_string(self, raw: str) -> str:
+        """Очищает строки от html тэгов и лишних пробелов
+
+                Args:
+                    raw (str): строка csv файла
+                Returns:
+                    str: строка без лишних пробелов и html тэгов
+                """
         clean_string = re.sub('<.*?>', '', raw)
         return clean_string if '\n' in raw else " ".join(clean_string.split())
 
     def csv_reader(self, file_name: str) -> Tuple[List[str], List[List[str]]]:
+        """Считывает записи из файла file_name
+
+                Args:
+                    file_name (str): название файла csv
+
+                Returns:
+                    Tuple(List[str], List[str]): (список заголовков CSV,
+                    список списков, где каждый вложенный список содержит все поля вакансии)
+
+                """
         reader = csv.reader(open(file_name, encoding='utf_8_sig'))
         data_base = [line for line in reader]
         fields = data_base[0]
@@ -21,6 +54,16 @@ class DataSet:
         return fields, vacancies
 
     def csv_filer(self, fields: List[str], vacancies_list: List[List[str]]) -> List[Dict[str, str]]:
+        """Отсекает те строки, которые заполнены не полностью, или содержат пустые элементы
+                 и возвращает список словарей, представляющих вакансию, где ключи содержат все поля вакансии
+
+                Args:
+                    fields (list): список названий полей
+                    vacancies_list (List[str]): список списков, где каждый вложенный список содержит все поля вакансии
+
+                Returns:
+                    List[Dict[str, str]]: список словарей, представляющих вакансию, где ключи содержат все поля вакансии
+                """
         filtered_vacancies = list(filter(lambda vac: (len(vac) == len(fields) and vac.count('') == 0), vacancies_list))
         dict_vacans = [dict(zip(fields, map(self.clean_string, vac))) for vac in filtered_vacancies]
         if (len(dict_vacans) == 0):
@@ -31,7 +74,21 @@ class DataSet:
 
 
 class Vacancy:
+    """Класс для представления вакансии
+
+    Attributes:
+        name (str): название вакансии
+        salary (Salary): объект зарплата, содержит информацию о вилке оклада, указан ли оклад до вычета налогов и валюте
+        area_name (str): город вакансии
+        published_at (int): год публикации
+    """
     def __init__(self, vac: Dict[str, str]):
+        """Инициализирует объект Vacancy
+
+        Args:
+            vac (dict(str, str)): словарь, представляющий вакансию
+
+        """
         self.name = vac['name']
         self.description = vac['description']
         self.key_skills = vac['key_skills'].split('\n')
@@ -56,7 +113,25 @@ dict_currency_to_rub = {"AZN": 35.68,
 
 
 class Salary:
+    """Класс для представления зарплаты
+
+        Attributes:
+            salary_from (str): верхняя граница вилки оклада
+            salary_to (str):нижняя граница вилки оклада
+            salary_currency (str): валюта оклада
+            salary_gross (bool): указан ли оклад до вычета налогов
+        """
     def __init__(self, salary_from: str, salary_to: str, salary_gross: str, salary_currency: str):
+        """Инициализирует объект Salary
+
+        Args:
+            salary_from (str or int or float): верхняя граница вилки оклада
+            salary_to (str or int or float):нижняя граница вилки оклада
+            salary_currency (str): валюта оклада
+            salary_gross (bool): указан ли оклад до вычета налогов
+        -------
+        object
+        """
         self.salary_from = salary_from
         self.salary_to = salary_to
         self.salary_gross = salary_gross
@@ -112,7 +187,28 @@ reverse_translation = {"Название": "name",
 
 
 class InputConect:
+    """Класс для подготовления данных для вывода в консоль в виде таблицы
+
+    Attributes:
+        DataSet (List[Vacancy]): список вакансий
+        param (str): параметр фильтрации
+        sorting_param (str): параметр сортировки
+        is_reverse (bool): True-по убыванию, False-по возрастанию
+        interval (list(int)): порядковые номера вакансий с какой по какую выводить в таблицу
+        columns (str): какие поля отображать в таблице
+
+    """
     def __init__(self, data_set, parameter, sorting_param, is_reverse, interval, columns):
+        """Инициализирует объект класса InputConnect
+
+        Args:
+            data_set (List[Vacancy]): список вакансий
+            parameter (list(str: str)): параметр фильтрации содержит поле и значение из возможных полей Vacancy
+            sorting_param (str): параметр сортировки
+            is_reverse (bool): True-по убыванию, False-по возрастанию
+            interval (list(int)): порядковые номера вакансий с какой по какую выводить в таблицу
+            columns (str): какие поля отображать в таблице
+        """
         self.param = parameter
         self.DataSet = data_set
         self.sorting_param = sorting_param
@@ -121,13 +217,38 @@ class InputConect:
         self.columns = columns
 
     def formatter(self, row):
+        """ объект класса Vacancy сформированный из строки CSV-файла со стандартными значениями,
+         возвращает новый словарь со всем необходимым форматированием и подстановками,
+          предназначенным для печати. Эта функция используется в функции print_vacancies.
+
+        Args:
+            row (Vacancy): объект класса Vacancy сформированный из строки CSV-файла со стандартными значениями
+            
+        Returns:
+            (dict): словарь со всем необходимым форматированием
+                      'Оклад' - <верхняя граница оклада округлённая вниз>
+           - <верхняя граница оклада округлённая вниз> <название валюты> <С/без вычетом налогов>
+           'published_at': дата публикации в формате: dd.mm.yyyy
+           поля "name", "description", "key_skills" list(str), "employer_name"  без изменения
+           'expirience_id': если NoExpirience - "Нет опыта",
+               "between1And3": "От 1 года до 3 лет",
+               "between3And6": "От 3 до 6 лет",
+               "moreThan6": "Более 6 лет",
+            'premium': Да/Нет
+        """
         result = {}
         salary_list = []
 
         def check_need_translate(key):
+            """Переводит значения полей 'expirience_id'("Нет опыта",
+               "От 1 года до 3 лет", "От 3 до 6 лет", "Более 6 лет"), 'premium'(Да/Нет)
+            """
             result[key] = translation[getattr(row, key)]
 
         def check_last_salary_field(salary):
+            """Форматирует оклад в формате <верхняя граница оклада округлённая вниз>
+           - <верхняя граница оклада округлённая вниз> <название валюты> <С/без вычетом налогов>
+            """
             salary_list.append(salary.salary_from)
             salary_list.append(getattr(salary, 'salary_to'))
             salary_list.append(getattr(salary, 'salary_currency'))
@@ -140,13 +261,18 @@ class InputConect:
                                                          getattr(salary,
                                                                  'salary_gross')] == 'Да' else 'С вычетом налогов'
             result[
-                'Оклад'] = f'{salary_list[0]} - {salary_list[1]} ({translation[getattr(salary, "salary_currency")]}) ({salary_list[2]})'
+                'Оклад'] = f'{salary_list[0]} - {salary_list[1]}' \
+                           f' ({translation[getattr(salary, "salary_currency")]}) ({salary_list[2]})'
 
         def check_data(key):
+            """переводит поле "published_at" в формат dd.mm.YYYY
+            """
             result[key] = datetime.datetime.strptime(getattr(row, key), '%Y-%m-%dT%H:%M:%S%z').strftime(
                 '%d.%m.%Y')
 
         def check_else_fields(key):
+            """Принимает только те поля, которые нужно оставить без изменения
+            """
             result[key] = getattr(row, key)
 
         checks = list(translation.keys())
@@ -181,9 +307,8 @@ class InputConect:
         'Премиум-вакансия': lambda data_vacancies, par_value: [vac for vac in data_vacancies
                                                                if par_value == translation[vac.premium]],
         'Дата публикации вакансии': lambda data_vacancies, par_value: [vac for vac in data_vacancies
-                                                                       if par_value == datetime.datetime.strptime(
-                vac.published_at, '%Y-%m-%dT%H:%M:%S%z').strftime(
-                '%d.%m.%Y')],
+                                                                       if par_value ==
+               datetime.datetime.strptime(vac.published_at, '%Y-%m-%dT%H:%M:%S%z').strftime('%d.%m.%Y')],
 
         'Название': lambda data_vacancies, par_value: [vac for vac in data_vacancies if par_value == vac.name],
         'Название региона': lambda data_vacancies, par_value: [vac for vac in data_vacancies if
@@ -201,6 +326,21 @@ class InputConect:
     }
 
     def data_sort(self) -> list:
+        """Сортирует DataSet в порядке is_reverse по параметру sorting_param.
+         Способ сортировки выбирается по ключу из словаря data_sort_dict.
+         значения sorting_param и соответсвие способа сортировки:
+         Наывыки(key_skillls): по длинне
+         'Оклад' по возрастанию зарплаты конвертированную(если надо) в рубли
+         'Опыт работы' по рангу "noExperience": 0,
+                      "between1And3": 1,
+                      "between3And6": 2,
+                      "moreThan6": 3
+        'Дата публикации вакансии'(published_at): сравнивает только Y M D
+        Эта функция используется в функции print_vacancies.
+
+        Returns:
+            list(Vacancy): сортированный DataSet список вакансий
+        """
         if self.sorting_param in self.data_sort_dict.keys():
             self.DataSet = sorted(self.DataSet, key=self.data_sort_dict[self.sorting_param],
                                   reverse=self.is_reverse)
@@ -213,22 +353,44 @@ class InputConect:
                           reverse=self.is_reverse)
 
     def edit_date(func):
+        """функция обёртка фильтрует результирующий список вакансий в ссотвествии с параметром(parameter)
+        Если параметра фильтрации нет, то осуществлять фильтрацию не требуется
+        Если на входе значение не содержит ’: ’, то выведет "Формат ввода некорректен таблицу не печатать
+        Если введён несуществующий параметр поиска например: ’qwerty: Да’, то выводит
+        "Параметр поиска некорректен таблицу не печатать
+        Если поиск показал что соответствующих вакансий нет, то выводить "Ничего не найдено таблицу не печатать
+
+        Поля Название, Описание, Компания сравниваются дословно.
+        Введённый оклад должен входить в диапазон salary_from <= input <= salary_to
+        Поля которые требуют перевод, должны быть переведены, при помощи обратных словарей, и сравнены
+        Дата принимается в формате: ’Дата публикации вакансии: 17.07.2022’, сравнивать только Y M D
+
+        """
         def wrap(self):
             self.DataSet = self.DataSet if len(parameter) != 2 else self.data_filter_dict[parameter[0]](self.DataSet,
                                                                                                         parameter[1])
-            # data_vacancies = data_vacancies if len(parameter) != 2 else data_filter(data_vacancies, parameter)
             self.DataSet = self.DataSet if len(self.DataSet) != 0 else 'Ничего не найдено'
             if type(self.DataSet) is str:
                 print(self.DataSet)
                 return
             self.DataSet = self.DataSet if len(self.sorting_param) == 0 else self.data_sort()
-            data = self.DataSet
             func(self)
 
         return wrap
 
     @edit_date
     def print_vacancies(self):
+        """Выводит в консоль вакансии в таблице в таком виде:
+        каждая строка пронумерована
+        навыки выводятся каждый навык на отдельной строке без запятых
+        границы вокруг всех ячеек
+        максимальный объём ячейки 100 знакомест
+        Ширину столбцов - 20 знакомест
+        в шапке таблицы только столбцы № и columns
+        обрезка interval[] выводит вакансии c interval[0] по interval[1] не включая в таблицу
+        если указано одно значение, то до конца списка
+
+        """
         head = self.formatter(self.DataSet[0])
         table_header = list(map(lambda head: translation[head], self.formatter(self.DataSet[0]).keys()))
         table_header.insert(0, '№')
@@ -258,12 +420,18 @@ def exit_from_file(message):
     exit()
 
 
-file_name = input('Введите название файла: ')
-parameter = input('Введите параметр фильтрации: ')
-sorting_param = input('Введите параметр сортировки: ')
-is_reversed_sort = input('Обратный порядок сортировки (Да / Нет): ')
-interval = list(map(int, input('Введите диапазон вывода: ').split()))
-columns = input('Введите требуемые столбцы: ')
+file_name = "vacancies_medium.csv"
+parameter = "Опыт работы: От 3 до 6 лет"
+sorting_param =  "Оклад"
+is_reversed_sort =  'Нет'
+interval = list(map(int, "10 20".split()))
+columns = 'Название, Навыки, Опыт работы, Компания'
+# file_name = input('Введите название файла: ')
+# parameter = input('Введите параметр фильтрации: ')
+# sorting_param = input('Введите параметр сортировки: ')
+# is_reversed_sort = input('Обратный порядок сортировки (Да / Нет): ')
+# interval = list(map(int, input('Введите диапазон вывода: ').split()))
+# columns = input('Введите требуемые столбцы: ')
 
 
 if os.stat(file_name).st_size == 0:
