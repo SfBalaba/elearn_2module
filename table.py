@@ -1,5 +1,9 @@
+import cProfile
 import os, re, csv
 import datetime
+import cProfile
+from pstats import Stats, SortKey
+from pstats import Stats
 from typing import Dict, List, Tuple
 from prettytable import PrettyTable, ALL
 
@@ -121,6 +125,7 @@ class Salary:
             salary_currency (str): валюта оклада
             salary_gross (bool): указан ли оклад до вычета налогов
         """
+
     def __init__(self, salary_from: str, salary_to: str, salary_gross: str, salary_currency: str):
         """Инициализирует объект Salary
 
@@ -269,6 +274,8 @@ class InputConect:
             """
             result[key] = datetime.datetime.strptime(getattr(row, key), '%Y-%m-%dT%H:%M:%S%z').strftime(
                 '%d.%m.%Y')
+
+
 
         def check_else_fields(key):
             """Принимает только те поля, которые нужно оставить без изменения
@@ -420,18 +427,18 @@ def exit_from_file(message):
     exit()
 
 
-file_name = "vacancies_medium.csv"
-parameter = "Опыт работы: От 3 до 6 лет"
-sorting_param =  "Оклад"
-is_reversed_sort =  'Нет'
-interval = list(map(int, "10 20".split()))
-columns = 'Название, Навыки, Опыт работы, Компания'
-# file_name = input('Введите название файла: ')
-# parameter = input('Введите параметр фильтрации: ')
-# sorting_param = input('Введите параметр сортировки: ')
-# is_reversed_sort = input('Обратный порядок сортировки (Да / Нет): ')
-# interval = list(map(int, input('Введите диапазон вывода: ').split()))
-# columns = input('Введите требуемые столбцы: ')
+# file_name = "vacancies_medium.csv"
+# parameter = "Опыт работы: От 3 до 6 лет"
+# sorting_param = "Оклад"
+# is_reversed_sort = 'Нет'
+# interval = list(map(int, "10 20".split()))
+# columns = 'Название, Навыки, Опыт работы, Компания'
+file_name = input('Введите название файла: ')
+parameter = input('Введите параметр фильтрации: ')
+sorting_param = input('Введите параметр сортировки: ')
+is_reversed_sort = input('Обратный порядок сортировки (Да / Нет): ')
+interval = list(map(int, input('Введите диапазон вывода: ').split()))
+columns = input('Введите требуемые столбцы: ')
 
 
 if os.stat(file_name).st_size == 0:
@@ -450,10 +457,15 @@ if len(columns) != 0:
     columns = columns.split(', ')
     columns.insert(0, '№')
 
-ds = DataSet(file_name)
-inpt = InputConect(ds.vacancies_objects, parameter=parameter,
-                   interval=interval,
-                   sorting_param=sorting_param,
-                   is_reverse=is_reversed_sort,
-                   columns=columns)
-inpt.print_vacancies()
+
+def get_table():
+    ds = DataSet(file_name)
+    inpt = InputConect(ds.vacancies_objects, parameter=parameter,
+                       interval=interval,
+                       sorting_param=sorting_param,
+                       is_reverse=is_reversed_sort,
+                       columns=columns)
+    inpt.print_vacancies()
+
+
+get_table()
