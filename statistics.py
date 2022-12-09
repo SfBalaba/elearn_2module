@@ -178,9 +178,9 @@ class Vacancy:
         if date_vac.__class__.__name__ != 'str':
             raise TypeError('Argument must be string type')
         else:
-            # return int(datetime.datetime.strptime(date_vac, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y'))
+            return int(datetime.datetime.strptime(date_vac, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y'))
             # return int(date_vac.split('-').[0])
-            return int(date_vac[:4])
+            # return int(date_vac[:4])
 
 
 class Salary:
@@ -380,7 +380,7 @@ class Report():
 
         x = ['Другие'] + list(self.pers_by_city.keys())
         ax4.set_title('Доля вакансий по городам')
-        city_percent = list(pers_by_city.values())
+        city_percent = list(self.pers_by_city.values())
         city_percent.insert(0, 1 - sum(city_percent))
         ax4.pie(city_percent, radius=1, labels=x, textprops={'fontsize': 6})
 
@@ -538,19 +538,21 @@ def get_statistic(result_list, index: int, is_reversed=False, slice=0):
     statistic = dict(sorted(result_list, key=lambda x: x[index], reverse=is_reversed)[:slice])
     return statistic
 
+# file_name = input('Введите название файла: ')
+# vacancy_name = input('Введите название профессии: ')
+# if os.stat(file_name).st_size == 0:
+#     exit_from_file('Пустой файл')
+# data = DataSet(file_name)
+# if len(data.vacancies_objects) == 0:
+#     exit_from_file('Нет данных')
+# dict_cities = {}
 
-file_name = input('Введите название файла: ')
-vacancy_name = input('Введите название профессии: ')
-if os.stat(file_name).st_size == 0:
-    exit_from_file('Пустой файл')
-data = DataSet(file_name)
-if len(data.vacancies_objects) == 0:
-    exit_from_file('Нет данных')
-dict_cities = {}
-
-
-def get_stat():
-    global vac, pers_by_city
+def get_all_stat(file_name, vacancy_name):
+    global vac, pers_by_city, data, pers_by_city
+    data = DataSet(file_name)
+    if len(data.vacancies_objects) == 0:
+        exit_from_file('Нет данных')
+    dict_cities = {}
     for vac in data.vacancies_objects:
         if vac.area_name not in dict_cities.keys():
             dict_cities[vac.area_name] = 0
@@ -580,19 +582,21 @@ def get_stat():
     salary_by_city = get_statistic(get_dynamic_by_salary(needed_vacancies_objects, 'area_name').items(), 1, False,
                                    slice=10)
     pers_by_city = get_statistic(get_dynamic_by_count(needed_vacancies_objects, 'area_name').items(), 1, True, slice=10)
-    report = Report(salary_by_year=salary_by_year,
-                    salary_by_year_vac=salary_by_year_vac,
-                    count_by_year=count_by_year,
-                    count_by_year_vac=count_by_year_vac,
-                    salary_by_city=salary_by_city,
-                    pers_by_city=pers_by_city,
-                    vac=vacancy_name)
-    report.generate_exel()
-    report.generate_image()
-    report.generate_pdf()
+
+    return salary_by_year, count_by_year,salary_by_year_vac,count_by_year_vac,salary_by_city,pers_by_city
 
 
-get_stat()
+# salary_by_year, count_by_year,salary_by_year_vac,count_by_year_vac,salary_by_city,pers_by_city = get_all_stat(file_name)
+# report = Report(salary_by_year=salary_by_year,
+#                 salary_by_year_vac=salary_by_year_vac,
+#                 count_by_year=count_by_year,
+#                 count_by_year_vac=count_by_year_vac,
+#                 salary_by_city=salary_by_city,
+#                 pers_by_city=pers_by_city,
+#                 vac=vacancy_name)
+# report.generate_exel()
+# report.generate_image()
+# report.generate_pdf()
 
 if __name__ == "__main__":
     import doctest

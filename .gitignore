@@ -4,3 +4,5 @@ venv
 .idea
 vacancies_medium.csv
 __pycache__
+csv_by_years
+
