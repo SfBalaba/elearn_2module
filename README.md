@@ -14,3 +14,6 @@
 ![2](https://user-images.githubusercontent.com/102922461/206148457-72c7ab2f-25e5-43d1-bb8c-07ab01a1e9eb.jpg)
 # Оставляю реализацию№3. Время работы программы после поправок:
 ![4](https://user-images.githubusercontent.com/102922461/206148467-f2ea6265-c499-4701-8b57-7ab27a063c0b.jpg)
+
+# Разбила на чанки по годам:
+![Скриншот 09-12-2022 110434](https://user-images.githubusercontent.com/102922461/206635708-4fb89b15-0597-4491-8c0a-b32324f36c6e.jpg)
