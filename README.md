@@ -14,3 +14,16 @@
 ![2](https://user-images.githubusercontent.com/102922461/206148457-72c7ab2f-25e5-43d1-bb8c-07ab01a1e9eb.jpg)
 # Оставляю реализацию№3. Время работы программы после поправок:
 ![4](https://user-images.githubusercontent.com/102922461/206148467-f2ea6265-c499-4701-8b57-7ab27a063c0b.jpg)
+
+# Разбила на чанки по годам:
+![Скриншот 09-12-2022 110434](https://user-images.githubusercontent.com/102922461/206635708-4fb89b15-0597-4491-8c0a-b32324f36c6e.jpg)
+
+# Многопроцессорная обработка:
+
+До:
+![Скриншот 07-12-2022 165602](https://user-images.githubusercontent.com/102922461/206636536-ddd49132-23b0-4dd8-888e-c62522527f2b.jpg)
+После:
+![Скриншот 08-12-2022 152220](https://user-images.githubusercontent.com/102922461/206636610-86407942-2adf-43ca-976a-4366f179c225.jpg)
+Время сократилось в 2.7 раза
+# После конкурентных вычислений время сократилось в 1.3 раза:
+![1](https://user-images.githubusercontent.com/102922461/206637331-e753da2e-23a7-48ec-8557-2b051568d239.jpg)
