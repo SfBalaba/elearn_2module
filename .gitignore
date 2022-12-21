@@ -1,8 +1,7 @@
 ignored_example.txt
-vacancies_by_year.csv
 venv
 .idea
-vacancies_medium.csv
 __pycache__
 csv_by_years
-
+*.csv
+!currency_data.csv
