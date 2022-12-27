@@ -4,4 +4,5 @@ venv
 __pycache__
 csv_by_years
 *.csv
-!currency_data.csv
+!currencies.csv
+!first100vacancies.csv

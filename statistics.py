@@ -1,5 +1,6 @@
 import csv, re, os, datetime
 from typing import List, Dict, Tuple, Any
+
 import cProfile
 from pstats import Stats, SortKey
 
@@ -299,7 +300,7 @@ def exit_from_file(message):
     exit()
 
 
-class Report():
+class Report:
     """Класс для представления отчётов по статистике
 
     Attributes:

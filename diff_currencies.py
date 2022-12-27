@@ -10,6 +10,13 @@ file_name = 'vacancies_dif_currencies.csv'
 pd.set_option('expand_frame_repr', False)
 df = pd.read_csv(file_name)
 
+origin =df.drop(df[(df['salary_to'].isna()) & (df['salary_from'].isna())].index)
+origin['salary'] = origin.loc[df['salary_to'].isna(), ['salary_from']]
+origin['salary'].mask(df['salary_from'].isna(), origin['salary_to'], inplace=True)
+origin['salary'].mask((origin['salary_to'].notna()) & (origin['salary_from'].notna()),
+                  origin['salary_to'] + origin['salary_from']/2,
+                  inplace=True)
+print(origin)
 valid_currency = (df['salary_currency'].value_counts())
 print(df)
 valid_currency = [i for i in list(valid_currency.index) if valid_currency[i] >= 5000 and i != 'RUR']
@@ -29,4 +36,6 @@ for currency in valid_currency:
     currency_data.append(currency_request.drop(['Nominal'], axis=1).rename(columns = {'Value':currency}))
 result = pd.concat(currency_data,axis=1)
 
-result.to_csv('currency_data.csv')
+
+# origin['published_ad']
+# result.to_csv('currency_data.csv')
