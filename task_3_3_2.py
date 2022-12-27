@@ -22,8 +22,8 @@ def create_vacancies(file_name):
         else x['salary_from'], axis=1)
 
     df = df.drop(['salary_to', 'date', 'salary_currency'], axis=1).rename(columns={'salary_from': 'salary'})
-    df.head(100).to_csv('first100vacancies.csv', index=False)
-    # df.to_csv('vacancies_new.csv', index=False)
+    # df.head(100).to_csv('first100vacancies.csv', index=False)
+    df.to_csv('vacancies_new.csv', index=False)
     print('Создание итогового файла по вакансиям')
 
 
