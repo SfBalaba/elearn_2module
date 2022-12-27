@@ -26,7 +26,7 @@ def report_pdf(data_list, job_name):
               f'Количество вакансий - {job_name}']
     heads2 = ['Город', 'Уровень зарплат', 'Город', 'Доля вакансий']
     env = Environment(loader=FileSystemLoader('.'))
-    template = env.get_template("pdf_template.html")
+    template = env.get_template("pdf_template_pandas.html")
     pdf_template = template.render({'heads1': heads1, 'job': job_name,
                                     'salary_by_years': data_list[0],
                                     'job_salary_by_years': data_list[2],
@@ -62,29 +62,29 @@ def create_report():
         job_count_by_years[year] = len(year_df[year_df['name'].str.contains(job_name)])
 
     print('Создание первых четырех словарей')
-    #
-    # area = df['area_name'].value_counts().to_dict()
-    # area = dict(sorted(area.items(), key=lambda x: x[1], reverse=True))
-    # vacs_sum = len(df)
-    # result_city = [city for city in area.keys() if area[city] / vacs_sum > 0.01]
-    # salary_by_cities = {}
-    # vacs_by_cities = {}
-    #
-    # for i in range(10):
-    #     city = result_city[i]
-    #     salary_by_cities[city] = mean_to_number(df[df['area_name'] == city]['salary'].mean())
-    #     vacs_by_cities[city] = round((len(df[df['area_name'] == city]) / vacs_sum), 4)
+
+    area = df['area_name'].value_counts().to_dict()
+    area = dict(sorted(area.items(), key=lambda x: x[1], reverse=True))
+    vacs_sum = len(df)
+    result_city = [city for city in area.keys() if area[city] / vacs_sum > 0.01]
+    salary_by_cities = {}
+    vacs_by_cities = {}
+
+    for i in range(10):
+        city = result_city[i]
+        salary_by_cities[city] = mean_to_number(df[df['area_name'] == city]['salary'].mean())
+        vacs_by_cities[city] = round((len(df[df['area_name'] == city]) / vacs_sum), 4)
 
     print('Динамика уровня зарплат по годам:', salary_by_years)
     print('Динамика количества вакансий по годам:', vacs_by_years)
     print('Динамика уровня зарплат по годам для выбранной профессии:', job_salary_by_years)
     print('Динамика количества вакансий по годам для выбранной профессии:', job_count_by_years)
-    # print('Уровень зарплат по городам (в порядке убывания):', salary_by_cities)
-    # print('Доля вакансий по городам (в порядке убывания):', vacs_by_cities)
-    #
-    # data_list = [salary_by_years, vacs_by_years, job_salary_by_years, job_count_by_years, salary_by_cities,
-    #              vacs_by_cities]
-    # report_pdf(data_list, job_name)
+    print('Уровень зарплат по городам (в порядке убывания):', salary_by_cities)
+    print('Доля вакансий по городам (в порядке убывания):', vacs_by_cities)
+
+    data_list = [salary_by_years, vacs_by_years, job_salary_by_years, job_count_by_years, salary_by_cities,
+                 vacs_by_cities]
+    report_pdf(data_list, job_name)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+    <style type="text/css">
+        body {
+            text-align: center;
+            font-family: Verdana,Geneva,sans-serif;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+        .empty {
+            border: inherit;
+        }
+    </style>
+</head>
+<body>
+    <h1>Аналитика по зарплатам и городам для профессии {{job}}</h1>
+    <!--img src="C:\Users\Roman\PycharmProjects\pythonProject4\graph.png" width="800" height="600"-->
+    <h2>Статистика по годам</h2>
+    <table>
+        <tr>
+            <th>{{heads1[0]}}</th>
+            <th>{{heads1[1]}}</th>
+            <th>{{heads1[2]}}</th>
+            <th>{{heads1[3]}}</th>
+            <th>{{heads1[4]}}</th>
+        </tr>
+        {% for key, value in salary_by_years.items() %}
+        <tr>
+            <td>{{key}}</td>
+            <td>{{value}}</td>
+            <td>{{job_salary_by_years[key]}}</td>
+            <td>{{vacs_by_years[key]}}</td>
+            <td>{{job_count_by_years[key]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+<h2>Статистика по городам</h2>
+    <table>
+        <tr>
+            <th>{{heads2[0]}}</th>
+            <th>{{heads2[1]}}</th>
+            <th class="empty"></th>
+            <th>{{heads2[2]}}</th>
+            <th>{{heads2[3]}}</th>
+        </tr>
+        {% for i in range(10) %}
+        <tr>
+            <td>{{salary_key[i]}}</td>
+            <td>{{salary_by_cities[salary_key[i]]}}</td>
+            <td class="empty"></td>
+            <td>{{vacs_key[i]}}</td>
+            <td>{{vacs_by_cities[i]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
