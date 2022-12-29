@@ -1,4 +1,15 @@
-3.5.2 Создала в базе данных vacancy_db таблицу vacancies
+# 3.5.3 Аналитика из бд
+![Скриншот 29-12-2022 122108](https://user-images.githubusercontent.com/102922461/209928283-fc5eaf3f-18eb-439b-ac6b-73b22f3f4ae8.jpg)
+![Скриншот 29-12-2022 122735](https://user-images.githubusercontent.com/102922461/209928395-c79ec968-e18f-441c-b945-f92d823844d1.jpg)
+![Скриншот 29-12-2022 122626](https://user-images.githubusercontent.com/102922461/209928457-2ecbbd66-40a7-47ac-a1bf-2776b8550e08.jpg)
+![Скриншот 29-12-2022 122631](https://user-images.githubusercontent.com/102922461/209928449-42d7be18-7d8e-43dd-ac11-9ca8d81e012a.jpg)
+![Скриншот 29-12-2022 122637](https://user-images.githubusercontent.com/102922461/209928453-d07a9e9b-5289-453e-acc1-9b447ed99751.jpg)
+![Скриншот 29-12-2022 122643](https://user-images.githubusercontent.com/102922461/209928456-e261d0fe-2ec0-4775-b635-4066a923afa4.jpg)
+
+
+
+
+# 3.5.2 Создала в базе данных vacancy_db таблицу vacancies
 ![image](https://user-images.githubusercontent.com/102922461/209927454-30869014-90bf-4e96-bc05-057a7c3af5e3.png)
 
 
