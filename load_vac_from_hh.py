@@ -6,23 +6,37 @@ import concurrent.futures
 url = "https://api.hh.ru/vacancies"
 
 def execute_vacancies(vacancies: List[Dict[str, str]] or List[Dict[Dict[str, str], str]]) -> (List[List[str]]):
-    if len(vacancies) == 0:
-        return []
-    else:
-        return [
-            [
-                vacancy["name"],
-                vacancy["area"]["name"],
-                vacancy["salary"]["from"],
-                vacancy["salary"]["to"],
-                vacancy["salary"]["currency"],
-                vacancy["published_at"],
-            ]
-            for vacancy in vacancies
-            if vacancy["salary"]==True
-        ]
+    """ формирует дату для создания итогового датафрейма
+    оставляет только нужные поля: название, город, вилка оклада, дата публиукации вакансии
 
-def get_vacancies(params: dict) -> (List[Dict[str, str]] or List[Dict[Dict[str, str], str]]):
+    Args:
+        vacancies: список словарей выгруженных api содержащие информацию по вакасии
+
+    Returns: список вакансий c зарплатами
+
+    """
+    return [
+        [
+            vacancy["name"],
+            vacancy["area"]["name"],
+            vacancy["salary"]["from"],
+            vacancy["salary"]["to"],
+            vacancy["salary"]["currency"],
+            vacancy["published_at"],
+        ]
+        for vacancy in vacancies
+        if vacancy["salary"]
+    ]
+
+def get_vacancies_items(params: dict) -> (List[Dict[str, str]] or List[Dict[Dict[str, str], str]]):
+    """ поулчает json данные о вакансии по заданынм параметрам
+
+    Args:
+        params: параметры для запроса
+
+    Returns: данные по вакансиям
+
+    """
     return requests.get(url, params).json()["items"]
 
 
@@ -31,8 +45,8 @@ if __name__ == "__main__":
     params1 = [
         dict(
             specialization=1,
-            date_from="2022-12-25T00:00:00",
-            date_to="2022-12-25T12:00:00",
+            date_from="2022-12-01T00:00:00",
+            date_to="2022-12-01T12:00:00",
             per_page=100,
             page=i,
         )
@@ -42,8 +56,8 @@ if __name__ == "__main__":
     params2 = [
         dict(
             specialization=1,
-            date_from="2022-12-25T00:12:00",
-            date_to="2022-12-26T00:00:00",
+            date_from="2022-12-01T00:12:00",
+            date_to="2022-12-02T00:00:00",
             per_page=100,
             page=i,
         )
@@ -51,7 +65,7 @@ if __name__ == "__main__":
     ]
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        result = list(executor.map(get_vacancies, params1 + params2))
+        result = list(executor.map(get_vacancies_items, params1 + params2))
         response = list(executor.map(execute_vacancies, result))
         result = pd.concat(
             [
