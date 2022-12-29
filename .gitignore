@@ -6,3 +6,6 @@ csv_by_years
 *.csv
 !currencies.csv
 !first100vacancies.csv
+*.db
+vacancy_db
+vacancy_db.db
