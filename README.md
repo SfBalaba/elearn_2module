@@ -1,3 +1,7 @@
+3.5.2 Создала в базе данных vacancy_db таблицу vacancies
+![image](https://user-images.githubusercontent.com/102922461/209927454-30869014-90bf-4e96-bc05-057a7c3af5e3.png)
+
+
 # 3.5.1 Создала в базу данных vacancy_db таблицу currencies
 ![image](https://user-images.githubusercontent.com/102922461/209925521-83b3f362-b5ef-4a31-ac53-3b5b59af00fa.png)
 
