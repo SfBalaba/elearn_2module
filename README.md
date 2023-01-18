@@ -1,3 +1,7 @@
+# new statistics for site:
+https://github.com/SfBalaba/elearn_2module/tree/stat_for_site/new_stat_for_proj
+
+
 # 3.5.3 Аналитика из бд
 ![Скриншот 29-12-2022 122108](https://user-images.githubusercontent.com/102922461/209928283-fc5eaf3f-18eb-439b-ac6b-73b22f3f4ae8.jpg)
 ![Скриншот 29-12-2022 122735](https://user-images.githubusercontent.com/102922461/209928395-c79ec968-e18f-441c-b945-f92d823844d1.jpg)
