@@ -21,6 +21,7 @@ def execute_vacancies(vacancies: List[Dict[str, str]] or List[Dict[Dict[str, str
             vacancy["area"]["name"],
             vacancy["salary"]["from"],
             vacancy["salary"]["to"],
+            vacancy['description'],
             vacancy["salary"]["currency"],
             vacancy["published_at"],
         ]
@@ -45,8 +46,8 @@ if __name__ == "__main__":
     params1 = [
         dict(
             specialization=1,
-            date_from="2022-12-01T00:00:00",
-            date_to="2022-12-01T12:00:00",
+            date_from="2022-12-26T00:00:00",
+            date_to="2022-12-26T12:00:00",
             per_page=100,
             page=i,
         )
@@ -56,8 +57,8 @@ if __name__ == "__main__":
     params2 = [
         dict(
             specialization=1,
-            date_from="2022-12-01T00:12:00",
-            date_to="2022-12-02T00:00:00",
+            date_from="2022-12-26T00:12:00",
+            date_to="2022-12-27T00:00:00",
             per_page=100,
             page=i,
         )
@@ -75,6 +76,7 @@ if __name__ == "__main__":
                         "name",
                         "salary_from",
                         "salary_to",
+                        'description',
                         "salary_currency",
                         "area_name",
                         "published_at",

@@ -253,8 +253,10 @@ def get_dynamic_by_salary(vacancies: List[Vacancy], field: str, filter_name_vaca
         by_salary[vac.__getattribute__(field)] = [] if vac.__getattribute__(field) not in by_salary.keys() else \
             by_salary[
                 vac.__getattribute__(field)]
-    vacancies = vacancies if filter_name_vacancy == '' else list(
-        filter(lambda vac: filter_name_vacancy in vac.name, vacancies))
+    if len(filter_name_vacancy) != 0:
+        for vac_name in filter_name_vacancy:
+            vacancies += list(filter(lambda vac: vac_name in vac.__getattribute__('name'), vacancies))
+
     for vac in vacancies:
         by_salary[vac.__getattribute__(field)].append(
             vac.salary.convert_to_RUB())
@@ -280,8 +282,12 @@ def get_dynamic_by_count(vacancies: List[Vacancy], field: str, filter_name_vacan
     for vac in vacancies:
         by_count[vac.__getattribute__(field)] = 0 if vac.__getattribute__(field) not in by_count.keys() else by_count[
             vac.__getattribute__(field)]
-    vacancies = vacancies if filter_name_vacancy == '' else list(
-        filter(lambda vac: filter_name_vacancy in vac.name, vacancies))
+    new_list= []
+    if len(filter_name_vacancy) != 0:
+        for vac_name in filter_name_vacancy:
+            new_list = list(filter(lambda vac: vac_name in vac.__getattribute__('name'), vacancies))
+            vacancies += new_list
+
     for vac in vacancies:
         by_count[vac.__getattribute__(field)] += 1
     if field == 'area_name':
@@ -339,7 +345,7 @@ class Report:
         self.statistics = [salary_by_year, salary_by_year_vac, count_by_year, count_by_year_vac, salary_by_city,
                            self.pers_by_city]
 
-    def generate_image(self):
+    def аgenerate_image(self):
         """Генерирует изображение в директории report под именем report.png, с 4мя графиками: гистограммами 'Уровень зарплат по годам',
          'Количество вакансий по годам', 'Уровень зарплат по городам' и круговой диаграммой 'Количество вакансий по городам'
           для выбранной профессии, сохраняет сгенерированное изображение в корень проекта с названием grapth.png
@@ -353,7 +359,7 @@ class Report:
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2)
 
         ax1.bar(x - width / 2, self.salary_by_year.values(), width, label='средняя з/п')
-        ax1.bar(x + width / 2, self.salary_by_year_vac.values(), width, label=f'з/п {vacancy}')
+        ax1.bar(x + width / 2, self.salary_by_year_vac.values(), width, label=f'з/п {vacancy[2]}')
         ax1.set_title('Уровень зарплат по годам')
         plt.sca(ax1)
         plt.xticks(x, labels, fontsize=8, rotation=90)
@@ -362,7 +368,7 @@ class Report:
         ax1.grid(axis='y')
 
         ax2.bar(x - width / 2, self.count_by_year.values(), width, label='Количество вакансий')
-        ax2.bar(x + width / 2, self.count_by_year_vac.values(), width, label=f'Количество вакансий \n{vacancy}')
+        ax2.bar(x + width / 2, self.count_by_year_vac.values(), width, label=f'Количество вакансий \n{vacancy[2]}')
         ax2.set_title('Количество вакансий по годам')
         plt.sca(ax2)
         plt.xticks(x, labels, fontsize=8, rotation=90)
@@ -403,8 +409,8 @@ class Report:
         data_1 = self.statistics[:4]
         data_2 = self.statistics[4:5]
         data_3 = self.statistics[5:]
-        ws1.append(['Год', "Средняя зарплата", f"Средняя зарплата - {self.vacancy}",
-                    "Количество вакансий", f"Количество вакансий - {self.vacancy}"])
+        ws1.append(['Год', "Средняя зарплата", f"Средняя зарплата - {self.vacancy[2]}",
+                    "Количество вакансий", f"Количество вакансий - {self.vacancy[2]}"])
         ws2.append(["Город", "Уровень зарплат", "", "Город", "Доля зарплат"])
         keys = list(data_1[0].keys())
         self.create_table(ws1, keys, data_1, min_c=1, min_r=2, max_c=5)
@@ -600,5 +606,16 @@ def get_all_stat(file_name, vacancy_name):
 # report.generate_pdf()
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    vacancy_name = ['web develop', 'веб разработчик', 'web разработчик', 'web programmer', 'web программист', 'веб программист', 'битрикс разработчик', 'bitrix разработчик', 'drupal разработчик', 'cms разработчик', 'wordpress разработчик', 'wp разработчик', 'joomla разработчик', 'drupal developer', 'cms developer', 'wordpress developer', 'wp developer', 'joomla developer']
+    file_name = 'vacancies_with_skills.csv'
+    salary_by_year, count_by_year,salary_by_year_vac,count_by_year_vac,salary_by_city,pers_by_city = get_all_stat(file_name, vacancy_name)
+    report = Report(salary_by_year=salary_by_year,
+                    salary_by_year_vac=salary_by_year_vac,
+                    count_by_year=count_by_year,
+                    count_by_year_vac=count_by_year_vac,
+                    salary_by_city=salary_by_city,
+                    pers_by_city=pers_by_city,
+                    vac=vacancy_name)
+    report.generate_exel()
+    report.generate_image()
+    report.generate_pdf()
